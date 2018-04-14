@@ -9,6 +9,10 @@
         {{ category }}
       </li>
     </ul>
+    <div>
+      <button class="btn btn-primary" v-show="!deleted" v-on:click="deleteBlog">Delete</button>
+      <router-link class="btn btn-primary" v-bind:to="'/edit/' + this.id" exact>Edit</router-link>
+    </div>
   </div>
 </template>
 
@@ -17,8 +21,18 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      blog: {}
+      blog: {},
+      deleted: false
     };
+  },
+  methods: {
+    deleteBlog: function() {
+      this.$http
+        .delete("http://localhost:4000/api/blogs/" + this.id)
+        .then(function(data) {
+          this.deleted = true;
+        });
+    }
   },
   created() {
     this.$http

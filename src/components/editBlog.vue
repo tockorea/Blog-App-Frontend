@@ -1,11 +1,11 @@
 <template>
-  <div id="add-blog">
-    <h2>Add a New Blog Post</h2>
+  <div id="edit-blog">
+    <h2>Edit a Blog Post</h2>
     <form v-if="!submitted">
       <label>Blog Title:</label>
       <input type="text" required v-model.lazy="blog.title" />
       <label>Blog Content:</label>
-      <textarea v-model.lazy="blog.content"></textarea>
+      <textarea rows="10" v-model.lazy="blog.content"></textarea>
       <div id="checkboxes">
         <label>Ninjas</label>
         <input type="checkbox" value="ninjas" v-model="blog.categories" />
@@ -20,10 +20,10 @@
       <select v-model="blog.author">
         <option v-for="(author, index) in authors" :key="index">{{ author }}</option>
       </select>
-      <button class="btn btn-primary" v-on:click.prevent="post">Add Blog</button>
+      <button class="btn btn-primary" v-on:click.prevent="updateBlog">Update</button>
     </form>
     <div v-if="submitted">
-      <h3>Thanks for adding your post</h3>
+      <h3>Thanks for updating your post</h3>
     </div>
     <div id="preview">
       <h3>Preview Blog</h3>
@@ -43,34 +43,38 @@
 export default {
   data() {
     return {
-      blog: {
-        title: "",
-        content: "",
-        categories: [],
-        author: ""
-      },
+      id: this.$route.params.id,
+      blog: {},
       authors: ["The Net Ninja", "The Angular Avenger", "The Vue Vindicator"],
       submitted: false
     };
   },
   methods: {
-    post: function() {
+    updateBlog: function() {
       this.$http
-        .post("http://localhost:4000/api/blogs", this.blog)
+        .put("http://localhost:4000/api/blogs/" + this.id, this.blog)
         .then(function(data) {
           console.log(data);
           this.submitted = true;
         });
     }
+  },
+  created() {
+    this.$http
+      .get("http://localhost:4000/api/blogs/" + this.id)
+      .then(function(data) {
+        // console.log(data);
+        this.blog = data.body;
+      });
   }
 };
 </script>
 
 <style scoped>
-#add-blog * {
+#edit-blog * {
   box-sizing: border-box;
 }
-#add-blog {
+#edit-blog {
   margin: 20px auto;
   max-width: 500px;
 }
