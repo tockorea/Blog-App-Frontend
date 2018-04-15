@@ -40,27 +40,19 @@
 </template>
 
 <script>
+import eventBus from "../EventBus.js";
+
 export default {
+  props: ["blog"],
   data() {
     return {
-      blog: {
-        title: "",
-        content: "",
-        categories: [],
-        author: ""
-      },
       authors: ["The Net Ninja", "The Angular Avenger", "The Vue Vindicator"],
       submitted: false
     };
   },
   methods: {
     post: function() {
-      this.$http
-        .post("http://localhost:4000/api/blogs", this.blog)
-        .then(function(data) {
-          console.log(data);
-          this.submitted = true;
-        });
+      eventBus.$emit("addBlog", this.blog);
     }
   }
 };

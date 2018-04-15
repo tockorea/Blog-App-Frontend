@@ -15,18 +15,13 @@
 import searchMixin from "../mixins/searchMixin.js";
 
 export default {
+  props: ["blogs"],
   data() {
     return {
-      blogs: [],
       search: ""
     };
   },
   methods: {},
-  created() {
-    this.$http.get("http://localhost:4000/api/blogs").then(function(data) {
-      this.blogs = data.body;
-    });
-  },
   computed: {},
   filters: {
     toUppercase(value) {
