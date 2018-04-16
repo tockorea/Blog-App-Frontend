@@ -53,6 +53,7 @@ export default {
   methods: {
     post: function() {
       eventBus.$emit("addBlog", this.blog);
+      // this.submitted = true;
     }
   }
 };

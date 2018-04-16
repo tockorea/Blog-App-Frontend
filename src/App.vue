@@ -23,7 +23,12 @@ export default {
   },
   data() {
     return {
-      blog: {},
+      blog: {
+        title: "",
+        content: "",
+        categories: [],
+        author: ""
+      },
       blogs: []
     };
   },
@@ -49,10 +54,21 @@ export default {
       this.$http
         .post("http://localhost:4000/api/blogs", blog)
         .then(data => {
+          console.log(data.body);
           this.fetchBlogs();
         })
         .catch(ex => {
           console.log("addBlog failed : ", ex);
+        });
+    },
+    fetchBlogOne: function(id) {
+      this.$http
+        .get("http://localhost:4000/api/blogs/" + id)
+        .then(data => {
+          this.blog = data.body;
+        })
+        .catch(ex => {
+          console.log("fetchBlogOne failed", ex);
         });
     }
   }
