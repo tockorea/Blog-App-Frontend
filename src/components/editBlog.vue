@@ -20,7 +20,7 @@
       <select v-model="blog.author">
         <option v-for="(author, index) in authors" :key="index">{{ author }}</option>
       </select>
-      <button class="btn btn-primary" v-on:click.prevent="updateBlog">Update</button>
+      <button class="btn btn-primary" v-if="blog.title !== ''" v-on:click.prevent="updateBlog">Update</button>
     </form>
     <div v-if="submitted">
       <h3>Thanks for updating your post</h3>
@@ -40,32 +40,26 @@
 </template>
 
 <script>
+import eventBus from "../EventBus.js";
+
 export default {
+  props: ["blog"],
   data() {
     return {
       id: this.$route.params.id,
-      blog: {},
       authors: ["The Net Ninja", "The Angular Avenger", "The Vue Vindicator"],
       submitted: false
     };
   },
   methods: {
     updateBlog: function() {
-      this.$http
-        .put("http://localhost:4000/api/blogs/" + this.id, this.blog)
-        .then(function(data) {
-          console.log(data);
-          this.submitted = true;
-        });
+      eventBus.$emit("updateBlog", this.blog);
+      this.submitted = true;
     }
   },
   created() {
-    this.$http
-      .get("http://localhost:4000/api/blogs/" + this.id)
-      .then(function(data) {
-        // console.log(data);
-        this.blog = data.body;
-      });
+    eventBus.$emit("fetchBlogOne", this.id);
+    this.submitted = false;
   }
 };
 </script>

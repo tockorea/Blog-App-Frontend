@@ -20,7 +20,7 @@
       <select v-model="blog.author">
         <option v-for="(author, index) in authors" :key="index">{{ author }}</option>
       </select>
-      <button class="btn btn-primary" v-on:click.prevent="post">Add Blog</button>
+      <button class="btn btn-primary" v-if="blog.title !== ''" v-on:click.prevent="post">Add Blog</button>
     </form>
     <div v-if="submitted">
       <h3>Thanks for adding your post</h3>
@@ -53,8 +53,12 @@ export default {
   methods: {
     post: function() {
       eventBus.$emit("addBlog", this.blog);
-      // this.submitted = true;
+      this.submitted = true;
     }
+  },
+  created() {
+    eventBus.$emit("initBlog");
+    this.submitted = false;
   }
 };
 </script>

@@ -37,6 +37,18 @@ export default {
     eventBus.$on("addBlog", blog => {
       this.addBlog(blog);
     });
+    eventBus.$on("fetchBlogOne", id => {
+      this.fetchBlogOne(id);
+    });
+    eventBus.$on("updateBlog", blog => {
+      this.updateBlog(blog);
+    });
+    eventBus.$on("deleteBlog", id => {
+      this.deleteBlog(id);
+    });
+    eventBus.$on("initBlog", () => {
+      this.initBlog();
+    });
   },
   methods: {
     fetchBlogs: function() {
@@ -70,6 +82,36 @@ export default {
         .catch(ex => {
           console.log("fetchBlogOne failed", ex);
         });
+    },
+    updateBlog: function(blog) {
+      this.$http
+        .put("http://localhost:4000/api/blogs/" + blog._id, blog)
+        .then(data => {
+          console.log(data.body);
+          this.fetchBlogs();
+        })
+        .catch(ex => {
+          console.log("updateBlog failed : ", ex);
+        });
+    },
+    deleteBlog: function(id) {
+      this.$http
+        .delete("http://localhost:4000/api/blogs/" + id)
+        .then(data => {
+          console.log(data.body);
+          this.fetchBlogs();
+        })
+        .catch(ex => {
+          console.log("deleteBlog failed", ex);
+        });
+    },
+    initBlog: function() {
+      this.blog = {
+        title: "",
+        content: "",
+        categories: [],
+        author: ""
+      };
     }
   }
 };

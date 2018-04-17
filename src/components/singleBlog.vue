@@ -9,38 +9,32 @@
         {{ category }}
       </li>
     </ul>
-    <div>
-      <button class="btn btn-primary" v-show="!deleted" v-on:click="deleteBlog">Delete</button>
+    <div v-if="!deleted">
+      <button class="btn btn-primary" v-on:click="deleteBlog">Delete</button>
       <router-link class="btn btn-primary" v-bind:to="'/edit/' + this.id" exact>Edit</router-link>
     </div>
   </div>
 </template>
 
 <script>
+import eventBus from "../EventBus.js";
+
 export default {
+  props: ["blog"],
   data() {
     return {
       id: this.$route.params.id,
-      blog: {},
       deleted: false
     };
   },
   methods: {
     deleteBlog: function() {
-      this.$http
-        .delete("http://localhost:4000/api/blogs/" + this.id)
-        .then(function(data) {
-          this.deleted = true;
-        });
+      eventBus.$emit("deleteBlog", this.id);
+      this.deleted = true;
     }
   },
   created() {
-    this.$http
-      .get("http://localhost:4000/api/blogs/" + this.id)
-      .then(function(data) {
-        // console.log(data);
-        this.blog = data.body;
-      });
+    eventBus.$emit("fetchBlogOne", this.id);
   }
 };
 </script>
