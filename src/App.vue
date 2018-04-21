@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import addBlog from "./components/addBlog";
 import showBlogs from "./components/showBlogs";
 import listBlogs from "./components/listBlogs";
@@ -32,7 +33,7 @@ export default {
       blogs: []
     };
   },
-  mounted: function() {
+  mounted() {
     this.fetchBlogs();
     eventBus.$on("addBlog", blog => {
       this.addBlog(blog);
@@ -52,10 +53,10 @@ export default {
   },
   methods: {
     fetchBlogs: function() {
-      this.$http
-        .get("http://localhost:4000/api/blogs")
+      axios
+        .get(`http://localhost:4000/api/blogs`)
         .then(data => {
-          this.blogs = data.body;
+          this.blogs = data.data;
         })
         .catch(ex => {
           console.log("fetchBlogs failed", ex);
@@ -63,10 +64,9 @@ export default {
         });
     },
     addBlog: function(blog) {
-      this.$http
-        .post("http://localhost:4000/api/blogs", blog)
+      axios
+        .post(`http://localhost:4000/api/blogs`, blog)
         .then(data => {
-          console.log(data.body);
           this.fetchBlogs();
         })
         .catch(ex => {
@@ -74,20 +74,20 @@ export default {
         });
     },
     fetchBlogOne: function(id) {
-      this.$http
-        .get("http://localhost:4000/api/blogs/" + id)
+      axios
+        .get(`http://localhost:4000/api/blogs/${id}`)
         .then(data => {
-          this.blog = data.body;
+          this.blog = data.data;
         })
         .catch(ex => {
           console.log("fetchBlogOne failed", ex);
+          this.blog = {};
         });
     },
     updateBlog: function(blog) {
-      this.$http
-        .put("http://localhost:4000/api/blogs/" + blog._id, blog)
+      axios
+        .put(`http://localhost:4000/api/blogs/${blog._id}`, blog)
         .then(data => {
-          console.log(data.body);
           this.fetchBlogs();
         })
         .catch(ex => {
@@ -95,10 +95,9 @@ export default {
         });
     },
     deleteBlog: function(id) {
-      this.$http
-        .delete("http://localhost:4000/api/blogs/" + id)
+      axios
+        .delete(`http://localhost:4000/api/blogs/${id}`)
         .then(data => {
-          console.log(data.body);
           this.fetchBlogs();
         })
         .catch(ex => {
