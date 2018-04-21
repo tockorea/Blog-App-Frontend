@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
 import Routes from './routes'
+import { store } from './store/store';
 
 // Use vue-router package
 Vue.use(VueRouter);
@@ -33,6 +34,7 @@ Vue.filter('snippet', function(value) {
 
 new Vue({
   el: '#app',
+  store: store,
   render: h => h(App),
   router: router
 })

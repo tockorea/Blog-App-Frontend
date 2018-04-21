@@ -40,10 +40,7 @@
 </template>
 
 <script>
-import eventBus from "../EventBus.js";
-
 export default {
-  props: ["blog"],
   data() {
     return {
       id: this.$route.params.id,
@@ -51,14 +48,19 @@ export default {
       submitted: false
     };
   },
+  computed: {
+    blog() {
+      return this.$store.state.blog;
+    }
+  },
   methods: {
     updateBlog: function() {
-      eventBus.$emit("updateBlog", this.blog);
+      this.$store.dispatch("updateBlog", this.blog);
       this.submitted = true;
     }
   },
   created() {
-    eventBus.$emit("fetchBlogOne", this.id);
+    this.$store.dispatch("fetchBlogOne", this.id);
     this.submitted = false;
   }
 };

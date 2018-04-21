@@ -17,24 +17,26 @@
 </template>
 
 <script>
-import eventBus from "../EventBus.js";
-
 export default {
-  props: ["blog"],
   data() {
     return {
       id: this.$route.params.id,
       deleted: false
     };
   },
+  computed: {
+    blog() {
+      return this.$store.state.blog;
+    }
+  },
   methods: {
     deleteBlog: function() {
-      eventBus.$emit("deleteBlog", this.id);
+      this.$store.dispatch("deleteBlog", this.id);
       this.deleted = true;
     }
   },
   created() {
-    eventBus.$emit("fetchBlogOne", this.id);
+    this.$store.dispatch("fetchBlogOne", this.id);
   }
 };
 </script>

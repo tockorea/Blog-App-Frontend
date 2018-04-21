@@ -40,24 +40,26 @@
 </template>
 
 <script>
-import eventBus from "../EventBus.js";
-
 export default {
-  props: ["blog"],
   data() {
     return {
       authors: ["The Net Ninja", "The Angular Avenger", "The Vue Vindicator"],
       submitted: false
     };
   },
+  computed: {
+    blog() {
+      return this.$store.state.blog;
+    }
+  },
   methods: {
     post: function() {
-      eventBus.$emit("addBlog", this.blog);
+      this.$store.dispatch("addBlog", this.blog);
       this.submitted = true;
     }
   },
   created() {
-    eventBus.$emit("initBlog");
+    this.$store.commit("initBlog");
     this.submitted = false;
   }
 };

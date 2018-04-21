@@ -15,14 +15,16 @@
 import searchMixin from "../mixins/searchMixin.js";
 
 export default {
-  props: ["blogs"],
   data() {
     return {
       search: ""
     };
   },
-  methods: {},
-  computed: {},
+  computed: {
+    blogs() {
+      return this.$store.state.blogs;
+    }
+  },
   filters: {
     toUppercase(value) {
       return value.toUpperCase();
