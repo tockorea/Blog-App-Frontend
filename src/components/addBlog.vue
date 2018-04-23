@@ -3,38 +3,38 @@
     <h2>Add a New Blog Post</h2>
     <form v-if="!submitted">
       <label>Blog Title:</label>
-      <input type="text" required v-model.lazy="blog.title" />
+      <input type="text" required v-model.lazy="title" />
       <label>Blog Content:</label>
-      <textarea v-model.lazy="blog.content"></textarea>
+      <textarea v-model.lazy="content"></textarea>
       <div id="checkboxes">
         <label>Ninjas</label>
-        <input type="checkbox" value="ninjas" v-model="blog.categories" />
+        <input type="checkbox" value="ninjas" v-model="categories" />
         <label>Wizards</label>
-        <input type="checkbox" value="wizards" v-model="blog.categories" />
+        <input type="checkbox" value="wizards" v-model="categories" />
         <label>Mario</label>
-        <input type="checkbox" value="mario" v-model="blog.categories" />
+        <input type="checkbox" value="mario" v-model="categories" />
         <label>Cheese</label>
-        <input type="checkbox" value="cheese" v-model="blog.categories" />
+        <input type="checkbox" value="cheese" v-model="categories" />
       </div>
       <label>Author:</label>
-      <select v-model="blog.author">
+      <select v-model="author">
         <option v-for="(author, index) in authors" :key="index">{{ author }}</option>
       </select>
-      <button class="btn btn-primary" v-if="blog.title !== ''" v-on:click.prevent="post">Add Blog</button>
+      <button class="btn btn-primary" v-if="title !== ''" v-on:click.prevent="post">Add Blog</button>
     </form>
     <div v-if="submitted">
       <h3>Thanks for adding your post</h3>
     </div>
     <div id="preview">
       <h3>Preview Blog</h3>
-      <p>Blog title: {{ blog.title }}</p>
+      <p>Blog title: {{ title }}</p>
       <p>Blog content:</p>
-      <p>{{ blog.content }}</p>
+      <p>{{ content }}</p>
       <p>Blog Categories:</p>
       <ul>
-        <li v-for="(category, index) in blog.categories" :key="index">{{ category }}</li>
+        <li v-for="(category, index) in categories" :key="index">{{ category }}</li>
       </ul>
-      <p>Author: {{ blog.author }}</p>
+      <p>Author: {{ author }}</p>
     </div>
   </div>
 </template>
@@ -50,6 +50,38 @@ export default {
   computed: {
     blog() {
       return this.$store.state.blog;
+    },
+    title: {
+      get() {
+        return this.$store.state.blog.title;
+      },
+      set(value) {
+        this.$store.commit("updateTitle", value);
+      }
+    },
+    content: {
+      get() {
+        return this.$store.state.blog.content;
+      },
+      set(value) {
+        this.$store.commit("updateContent", value);
+      }
+    },
+    categories: {
+      get() {
+        return this.$store.state.blog.categories;
+      },
+      set(value) {
+        this.$store.commit("updateCategories", value);
+      }
+    },
+    author: {
+      get() {
+        return this.$store.state.blog.author;
+      },
+      set(value) {
+        this.$store.commit("updateAuthor", value);
+      }
     }
   },
   methods: {

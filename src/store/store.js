@@ -5,7 +5,7 @@ import axios from 'axios';
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
-  // strict: true,
+  strict: true,
   state: {
     blog: {
       title: "",
@@ -32,6 +32,18 @@ export const store = new Vuex.Store({
     },
     initBlogs: state => {
       state.blogs = [];
+    },
+    updateTitle: (state, payload) => {
+      state.blog.title = payload;
+    },
+    updateContent: (state, payload) => {
+      state.blog.content = payload;
+    },
+    updateCategories: (state, payload) => {
+      state.blog.categories = payload;
+    },
+    updateAuthor: (state, payload) => {
+      state.blog.author = payload;
     }
   },
   actions: {
